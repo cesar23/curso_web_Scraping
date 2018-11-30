@@ -1,26 +1,43 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <style>
-        .semana {
-            color: gray;
-        }
-        table{
-            font-size: 0.8em;
-        }
-        .titulo1{
-            color: white !important;
-            padding-bottom: 3%;
-        }
-    </style>
+
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+    <!-- Custom styles for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/4.1/examples/blog/blog.css" rel="stylesheet">
 </head>
-<body style="background-color: #bb32c9">
+<?php
+
+    // $link=base64_decode($_GET['link']);
+    require 'simple_html_dom_php7.php';
+    $html = file_get_html('http://www.seriesperu.com/p/esto-es-guerra-programas-completos.html');
+
+    $CuadradosFechas= $html->find('div[class=separator]',2);
+    $fechaUltima_link= $CuadradosFechas->find('a',0);
+
+    $link= $fechaUltima_link->href;
+
+
+
+    $html = file_get_html($link);
+    $titulo=$html->find('h1[class=post-title entry-title]',0);
+    $article= $html->find('article',0);
+
+
+?>
+<body>
 <script>
     //Para saver si ya  cargo la  pagina
     document.addEventListener("DOMContentLoaded", function(event) {
@@ -32,9 +49,9 @@
 
             //si llegamos al ultimo iframe
             if(i+1==iframes.length){
-               //validamos  si  carlo los  iframes
+                //validamos  si  carlo los  iframes
                 document.getElementsByTagName("iframe")[i].addEventListener('load', function() {
-                   // alert("cargo sitio");
+                    // alert("cargo sitio");
                     var altoPagina=screen.height;
                     var anchoPagina=screen.width;
 
@@ -44,87 +61,80 @@
                     console.log("Ancho y alto:"+anchoPagina+"-"+altoPagina);
                     console.log("altoPagina_min:"+altoPagina_min);
                     console.log("anchoPagina_min:"+anchoPagina_min);
+                    var ancho_minRepro=this.offsetWidth -(this.offsetWidth/5);
+                    ancho_minRepro=Math.round(ancho_minRepro);
 
-                    $("iframe").css({"height": altoPagina-120, "width": anchoPagina-120});
+
+                    // var ele = document.getElementsByTagName("iframe")[i];
+                    // var offSetWidth = ele.offsetWidth;
+                    // console.log(offSetWidth);
+                    $("iframe").css({"height": ancho_minRepro, "width": "100%"});
                 });
             }
         }
     });
 
 
-    (function() {
-
-
-    })();
-
 
 </script>
-<div class="container py-5">
+<div class="container">
+    <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+            <div class="col-2 pt-1">
+                <a class="text-muted" href="#">Cesar Auris</a>
+            </div>
+            <div class="col-8 text-center">
+                <a class="blog-header-logo text-dark" href="#"><?php echo $titulo->innertext?></a>
+            </div>
+            <div class="col-2 d-flex justify-content-end align-items-center">
 
+                <a class="btn btn-sm btn-outline-secondary" href="#">Para mi mama(Mercedez saga)</a>
+            </div>
+        </div>
+    </header>
 
-        <?php
+    <div class="row mb-2">
 
-       // $link=base64_decode($_GET['link']);
-        require 'simple_html_dom_php7.php';
-        $html = file_get_html('http://www.seriesperu.com/p/esto-es-guerra-programas-completos.html');
-
-        $CuadradosFechas= $html->find('div[class=separator]',2);
-        $fechaUltima_link= $CuadradosFechas->find('a',0);
-
-        $link= $fechaUltima_link->href;
-
-
-
-        $html = file_get_html($link);
-        $titulo=$html->find('h1[class=post-title entry-title]',0);
-        $article= $html->find('article',0);
-        //echo $article;
-
-
-
-
-/*
-        $titulo = $html->find('div[class=panel]',0);
-        echo "<div class='col-12'>";
-        echo $titulo->find('h1[class=titulo1]',0);
-        echo "</div>";
-        $calendario = $html->find('div[class=tabla_calendario]');
-        foreach ($calendario as $cal) {
-            echo "<div class='col-md-4 col-sm-12'>";
-            $mes = $cal->find('div[class=elmes]',0);
-            $dias = $cal->find('table',0);
-
-            echo $mes,"\n",$dias;
-            echo "</div>";
-        }
-        */
-
+<!--    --><?php
+    foreach ($article->find('iframe') as $cal) {
         ?>
 
-<div class="row">
-    <h2><?php echo $titulo->innertext?></h2></div>
+
+
+        <div class="col-md-12">
+            <div class="card flex-md-row mb-4 shadow-sm">
+                <div class="card-body d-flex flex-column align-items-start">
+
+                   <?php echo $cal;?>
+                </div>
+
+            </div>
+        </div>
+        <?php
+    }
+        ?>
+
+    </div>
 </div>
 
-    <?php
-    foreach ($article->find('iframe') as $cal) {
+<footer class="blog-footer">
 
-          echo "<div class='row'>
-         ";
+    <p>
+        <a href="#">Para Dereck y mi mama</a>
+    </p>
+</footer>
 
-          echo $cal;
-          echo "</div><div class='col-md-12'><h1></h1></div><br>";
+<!-- Bootstrap core JavaScript
+================================================== -->
 
-    }
-    ?>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://getbootstrap.com/docs/4.1/assets/js/vendor/holder.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-</body>
-
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 <script>
 
-  //  $("iframe").css({"height": "yellow", "width": "200%"});
+    //  $("iframe").css({"height": "yellow", "width": "200%"});
     /*
     $('table').addClass('table table-bordered table-responsive bg-white');
     $('.elmes a').addClass('text-light');
@@ -137,5 +147,14 @@
     $( ".linkmes" ).attr("title","");
     */
 </script>
+
+</body>
+
+
 </body>
 </html>
+
+
+
+
+
