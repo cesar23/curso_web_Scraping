@@ -61,14 +61,19 @@
                     console.log("Ancho y alto:"+anchoPagina+"-"+altoPagina);
                     console.log("altoPagina_min:"+altoPagina_min);
                     console.log("anchoPagina_min:"+anchoPagina_min);
-                    var ancho_minRepro=this.offsetWidth -(this.offsetWidth/5);
-                    ancho_minRepro=Math.round(ancho_minRepro);
+
 
 
                     // var ele = document.getElementsByTagName("iframe")[i];
                     // var offSetWidth = ele.offsetWidth;
                     // console.log(offSetWidth);
+                    $("iframe").css({"height": 100, "width": "100%"});
+
+                    var ancho_minRepro=this.offsetWidth -(this.offsetWidth/2);
+                    ancho_minRepro=Math.round(ancho_minRepro);
                     $("iframe").css({"height": ancho_minRepro, "width": "100%"});
+
+
                 });
             }
         }
@@ -92,16 +97,20 @@
             </div>
         </div>
     </header>
+    <br>
 
-    <div class="row mb-2">
+    <div class="row mb-2" id="lista_iframes" >
 
 <!--    --><?php
-    foreach ($article->find('iframe') as $cal) {
+    foreach ($article->find('iframe')as $clave =>  $cal) {
         ?>
+        <div class="col-md-3">
+
+        </div>
 
 
-
-        <div class="col-md-12">
+        <div class="col-md-6">
+            <div><h2>Capitulo - <?php echo ($clave+1)?></h2></div>
             <div class="card flex-md-row mb-4 shadow-sm">
                 <div class="card-body d-flex flex-column align-items-start">
 
@@ -109,6 +118,9 @@
                 </div>
 
             </div>
+        </div>
+        <div class="col-md-3">
+
         </div>
         <?php
     }
